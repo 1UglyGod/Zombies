@@ -5,8 +5,12 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 
 public abstract class MapObject {
-	private int x;
-	private int y;
+	protected int x;
+	protected int y;
+	protected Image FaceBack;
+	protected Image FaceFront;
+	protected Image FaceLeft;
+	protected Image FaceRight;
 	protected Image myImage;
 	
 	public MapObject(int x, int y){
