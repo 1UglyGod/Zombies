@@ -12,6 +12,10 @@ public abstract class MapObject {
 	protected Image FaceLeft;
 	protected Image FaceRight;
 	protected Image myImage;
+	protected Image WalkBack;
+	protected Image WalkFront;
+	protected Image WalkLeft;
+	protected Image WalkRight;
 	
 	public MapObject(int x, int y){
 		this.x = x;
