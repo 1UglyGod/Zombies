@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 public class Player extends MapObject {
 	private int direction = 0; // 0 = front, 1 = left, 2 = back, 3 = right
 	private boolean walking = false;
-
+ 
 	public Player(int x, int y) {
 		super(x, y);
 		initImages();
@@ -106,5 +106,45 @@ public class Player extends MapObject {
 			System.err.println("Error drawing player");
 			break;
 		}
+	}
+	
+	public void moveLeft(){
+		if(x > 50){
+			x -= 5;
+			walking = true;
+			direction = 1;
+		}
+	}
+	
+	public void moveRight(){
+		if(x < 1150){
+			x += 5;
+			walking = true;
+			direction = 3;
+		}
+	}
+	
+	public void moveUp(){
+		if(y > 50){
+			y += 5;
+			walking = true;
+			direction = 0;
+		}
+	}
+	
+	public void moveDown(){
+		if(y < 750){
+			y -= 5;
+			walking = true;
+			direction = 2;
+		}
+	}
+	
+	public boolean walking(){
+		return walking;
+	}
+	
+	public void setWalkingFalse(){
+		walking = false;
 	}
 }
