@@ -126,17 +126,17 @@ public class Player extends MapObject {
 	
 	public void moveUp(){
 		if(y > 50){
-			y += 5;
+			y -= 5;
 			walking = true;
-			direction = 0;
+			direction = 2;
 		}
 	}
 	
 	public void moveDown(){
 		if(y < 750){
-			y -= 5;
+			y += 5;
 			walking = true;
-			direction = 2;
+			direction = 0;
 		}
 	}
 	
