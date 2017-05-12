@@ -109,7 +109,7 @@ public class Player extends MapObject {
 	}
 	
 	public void moveLeft(){
-		if(x > 50){
+		if(x > 0){
 			x -= 5;
 			walking = true;
 			direction = 1;
@@ -125,7 +125,7 @@ public class Player extends MapObject {
 	}
 	
 	public void moveUp(){
-		if(y > 50){
+		if(y > 5){
 			y -= 5;
 			walking = true;
 			direction = 2;
