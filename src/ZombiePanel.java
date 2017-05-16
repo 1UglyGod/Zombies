@@ -1,4 +1,5 @@
 import java.awt.Color;
+
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,10 +10,13 @@ import javax.swing.AbstractAction;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
+import javax.xml.stream.Location;
+import java.util.Random;
 
 public class ZombiePanel extends JPanel {
 	// Remember system properties in main
-	private List<Zombie> enemies = new ArrayList();
+	private List<Zombie> enemies;
+	private Zombie enemie;
 	private Player myPlayer;
 	private Timer t;
 	private boolean upPressed;
@@ -20,13 +24,30 @@ public class ZombiePanel extends JPanel {
 	private boolean rightPressed;
 	private boolean leftPressed;
 	private boolean spacePressed;
+	Random rand = new Random();
 
 	public ZombiePanel() {
 		this.setSize(1200, 800);
 		this.setBackground(Color.black);
 		myPlayer = new Player(10, 20);
+		enemies = new ArrayList();
+		addEnemies();
 		setUpTimer();
 		setUpKeyBindings();
+	}
+
+	private void addEnemies() {
+		// TODO Auto-generated method stub
+
+		for (int z = 0; z < 6; z++) {
+			int randX = rand.nextInt(1150) + 1;
+			System.out.println("randX: " + randX);
+			int randY = rand.nextInt(750) + 5;
+			System.out.println("randY: " + randY);
+			enemie = new Zombie(randX, randY);
+			enemies.add(enemie);
+		}
+		
 	}
 
 	private void setUpKeyBindings() {
@@ -54,7 +75,7 @@ public class ZombiePanel extends JPanel {
 		this.getActionMap().put("beginShoot", new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//create later
+				// create later
 				repaint();
 			}
 		});
@@ -62,7 +83,7 @@ public class ZombiePanel extends JPanel {
 		this.getActionMap().put("endShoot", new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//create later
+				// create later
 				repaint();
 			}
 		});
@@ -152,27 +173,47 @@ public class ZombiePanel extends JPanel {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		myPlayer.draw(g);
-		for (int i = 0; i < enemies.size(); i++) {System.out.println("tick!");
-			enemies.get(i).draw(g);
+		// enemie.draw(g,myPlayer.getX(),myPlayer.getY());
+		for (int i = 0; i < enemies.size(); i++) {
+	
+			enemies.get(i).draw(g, myPlayer.getX(), myPlayer.getY());
 		}
 	}
 
 	private void tick(Timer t) {
 		// TODO Auto-generated method stub
-		if(upPressed){
+		if (upPressed) {
 			myPlayer.moveUp();
 		}
-		if(downPressed){
+		if (downPressed) {
 			myPlayer.moveDown();
 		}
-		if(rightPressed){
+		if (rightPressed) {
 			myPlayer.moveRight();
 		}
-		if(leftPressed){
+		if (leftPressed) {
 			myPlayer.moveLeft();
 		}
-		if(!leftPressed && !rightPressed && !downPressed && !upPressed){
+		if (!leftPressed && !rightPressed && !downPressed && !upPressed) {
 			myPlayer.setWalkingFalse();
+		}
+		for (int i = 0; i < enemies.size(); i++){
+			zombieFollow(enemies.get(i));
+		}
+			//zombieFollow(enemies.get(i));
+	}
+
+	public void zombieFollow(Zombie z) {
+		if(myPlayer.getX() < z.getX()){
+			z.moveLeft();
+		}else if(myPlayer.getX() > z.getX()){
+			z.moveRight();
+		}
+		
+		if(myPlayer.getY() < z.getY()){
+			z.moveUp(); 
+		}else if(myPlayer.getY() > z.getY()){
+			z.moveDown();
 		}
 	}
 

@@ -7,31 +7,34 @@ import javax.imageio.ImageIO;
 public abstract class MapObject {
 	protected int x;
 	protected int y;
-	protected Image FaceBack;
-	protected Image FaceFront;
-	protected Image FaceLeft;
-	protected Image FaceRight;
-	protected Image myImage;
-	protected Image WalkBack;
-	protected Image WalkFront;
-	protected Image WalkLeft;
-	protected Image WalkRight;
 	
-	public MapObject(int x, int y){
+	protected static Image myImage;
+	
+
+	public MapObject(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
-	
-	public void draw(Graphics g){
+
+	public void draw(Graphics g) {
 		g.drawImage(myImage, x, y, null);
 	}
-	
-	protected void initImage(String src){
+
+	public int getX() {
+		return this.x;
+	}
+
+	public int getY() {
+		return this.y;
+	}
+
+	protected void initImage(String src) {
 		try {
 			URL url = getClass().getResource("res/" + src + ".png");
 			myImage = ImageIO.read(url);
 		} catch (Exception e) {
-			System.out.println("Image could not be opened: " + "res/" + src + ".png");
+			System.out.println("Image could not be opened: " + "res/" + src
+					+ ".png");
 			e.printStackTrace();
 		}
 	}
