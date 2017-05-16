@@ -16,6 +16,7 @@ import java.util.Random;
 public class ZombiePanel extends JPanel {
 	// Remember system properties in main
 	private List<Zombie> enemies;
+	private List<MapObject> blockers;
 	private Zombie enemie;
 	private Player myPlayer;
 	private Timer t;
@@ -31,9 +32,19 @@ public class ZombiePanel extends JPanel {
 		this.setBackground(Color.black);
 		myPlayer = new Player(10, 20);
 		enemies = new ArrayList();
+		blockers = new ArrayList();
 		addEnemies();
+		addBlockers();
 		setUpTimer();
 		setUpKeyBindings();
+	}
+
+	private void addBlockers() {
+		// TODO Auto-generated method stub
+		int num = (int) ((Math.random() * 10) + 1);
+		for (int i = 0; i < num; i++){
+			new Hut((int) (Math.random() * 1200), (int) (Math.random() * 800));
+		}
 	}
 
 	private void addEnemies() {
@@ -177,6 +188,9 @@ public class ZombiePanel extends JPanel {
 		for (int i = 0; i < enemies.size(); i++) {
 	
 			enemies.get(i).draw(g, myPlayer.getX(), myPlayer.getY());
+		}
+		for (int i = 0; i < blockers.size(); i++){
+			blockers.get(i).draw(g);
 		}
 	}
 

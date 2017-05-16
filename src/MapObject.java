@@ -8,7 +8,7 @@ public abstract class MapObject {
 	protected int x;
 	protected int y;
 	
-	protected static Image myImage;
+	private Image myImage;
 	
 
 	public MapObject(int x, int y) {
@@ -16,7 +16,11 @@ public abstract class MapObject {
 		this.y = y;
 	}
 
-	public void draw(Graphics g) {
+	public void draw(Graphics g, Image thisImage) {
+		g.drawImage(thisImage, x, y, null);
+	}
+	
+	public void draw(Graphics g){
 		g.drawImage(myImage, x, y, null);
 	}
 
@@ -27,7 +31,14 @@ public abstract class MapObject {
 	public int getY() {
 		return this.y;
 	}
+	
+	public Image getMyImage(){
+		return myImage;
+	}
 
+	public void setMyImage(Image i){
+		myImage = i;
+	}
 	protected void initImage(String src) {
 		try {
 			URL url = getClass().getResource("res/" + src + ".png");
