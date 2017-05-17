@@ -33,11 +33,11 @@ public abstract class MapObject {
 	}
 	
 	public Image getMyImage(){
-		return myImage;
+		return this.myImage;
 	}
 
 	public void setMyImage(Image i){
-		myImage = i;
+		this.myImage = i;
 	}
 	protected void initImage(String src) {
 		try {

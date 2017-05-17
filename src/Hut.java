@@ -7,6 +7,7 @@ public class Hut extends MapObject{
 		super(x, y);
 		if(getMyImage() == null){
 			initImage("Hut");
+			System.out.println("hut image is null");
 		}else{
 			setMyImage(hutImage);
 		}

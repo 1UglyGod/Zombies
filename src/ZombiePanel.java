@@ -25,6 +25,7 @@ public class ZombiePanel extends JPanel {
 	private boolean rightPressed;
 	private boolean leftPressed;
 	private boolean spacePressed;
+	Hut newHut = new Hut(10, 10);
 	Random rand = new Random();
 
 	public ZombiePanel() {
@@ -183,15 +184,17 @@ public class ZombiePanel extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		newHut.draw(g);
 		myPlayer.draw(g);
 		// enemie.draw(g,myPlayer.getX(),myPlayer.getY());
 		for (int i = 0; i < enemies.size(); i++) {
 	
 			enemies.get(i).draw(g, myPlayer.getX(), myPlayer.getY());
 		}
-		for (int i = 0; i < blockers.size(); i++){
-			blockers.get(i).draw(g);
-		}
+//		for (int i = 0; i < blockers.size(); i++){
+//			blockers.get(i).draw(g);
+//		}
+		
 	}
 
 	private void tick(Timer t) {
@@ -219,15 +222,15 @@ public class ZombiePanel extends JPanel {
 
 	public void zombieFollow(Zombie z) {
 		if(myPlayer.getX() < z.getX()){
-			z.moveLeft();
+			z.moveLeft(enemies);
 		}else if(myPlayer.getX() > z.getX()){
-			z.moveRight();
+			z.moveRight(enemies);
 		}
 		
 		if(myPlayer.getY() < z.getY()){
-			z.moveUp(); 
+			z.moveUp(enemies); 
 		}else if(myPlayer.getY() > z.getY()){
-			z.moveDown();
+			z.moveDown(enemies);
 		}
 	}
 
