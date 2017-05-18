@@ -7,22 +7,21 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 public class Zombie extends MapObject {
-	private int count = 0;
 	private int direction = 0;
 	private static Image WalkBack;
 	private static Image WalkFront;
 	private static Image WalkLeft;
 	private static Image WalkRight;
+	private final int moveSpeed = 1;
 	public Zombie(int x, int y) {
 		super(x, y);
+		setDim(50, 50);
 		// find way to reference a player
 		initImages();
 	}
 
 	private void initImages() {
 		if (WalkBack == null) {
-			count++;
-			System.out.println("Loading zombie images..." + count);
 			try {
 				URL url = getClass().getResource("res/skeleBack.png");
 				WalkBack = ImageIO.read(url);
@@ -81,70 +80,103 @@ public class Zombie extends MapObject {
 
 	}
 
-	public void moveLeft(List<Zombie> z) {
+	public void moveLeft(List<Zombie> z, List<MapObject> o) {
 		boolean x = true;
 		for(int i = 0; i < z.size(); i++){
 			if(!this.equals(z.get(i))){
-				if(new Rectangle(this.x - 1, this.y, 40, 40).intersects(new Rectangle(z.get(i).getX(), z.get(i).getY(), 40, 40))){
+				if(new Rectangle(this.x - moveSpeed, this.y, 40, 40).intersects(new Rectangle(z.get(i).getX(), z.get(i).getY(), 40, 40))){
+					x = false;
+				}
+			}
+		}
+		for(int i = 0; i < o.size(); i++){
+			if(!this.equals(o.get(i))){
+				if(new Rectangle(this.x - moveSpeed, this.y, 40, 40).intersects(new Rectangle(o.get(i).getX(), o.get(i).getY(), o.get(i).getWidth(), o.get(i).getHeight()))){
 					x = false;
 				}
 			}
 		}
 		if (this.x > 0 && x) {
-			this.x -= 1;
-
+			this.x -= moveSpeed;
+			direction = 1;
 		}
 	}
 
-	public void moveRight(List<Zombie> z) {
+	public void moveRight(List<Zombie> z, List<MapObject> o) {
 		boolean x = true;
 		for(int i = 0; i < z.size(); i++){
 			if(!this.equals(z.get(i))){
-				if(new Rectangle(this.x + 1, this.y, 40, 40).intersects(new Rectangle(z.get(i).getX(), z.get(i).getY(), 40, 40))){
+				if(new Rectangle(this.x + moveSpeed, this.y, 40, 40).intersects(new Rectangle(z.get(i).getX(), z.get(i).getY(), 40, 40))){
+					x = false;
+				}
+			}
+		}
+		for(int i = 0; i < o.size(); i++){
+			if(!this.equals(o.get(i))){
+				if(new Rectangle(this.x + moveSpeed, this.y, 40, 40).intersects(new Rectangle(o.get(i).getX(), o.get(i).getY(), o.get(i).getWidth(), o.get(i).getHeight()))){
 					x = false;
 				}
 			}
 		}
 		if (this.x < 1200 && x) {
-			this.x += 1;
-
+			this.x += moveSpeed;
+			direction = 3;
 		}
 	}
 
-	public void moveUp(List<Zombie> z) {
+	public void moveUp(List<Zombie> z, List<MapObject> o) {
 		boolean x = true;
 		for(int i = 0; i < z.size(); i++){
 			if(!this.equals(z.get(i))){
-				if(new Rectangle(this.x, this.y - 1, 40, 40).intersects(new Rectangle(z.get(i).getX(), z.get(i).getY(), 40, 40))){
+				if(new Rectangle(this.x, this.y - moveSpeed, 40, 40).intersects(new Rectangle(z.get(i).getX(), z.get(i).getY(), 40, 40))){
+					x = false;
+				}
+			}
+		}
+		for(int i = 0; i < o.size(); i++){
+			if(!this.equals(o.get(i))){
+				if(new Rectangle(this.x, this.y - moveSpeed, 40, 40).intersects(new Rectangle(o.get(i).getX(), o.get(i).getY(), o.get(i).getWidth(), o.get(i).getHeight()))){
 					x = false;
 				}
 			}
 		}
 		if (this.y > 0 && x) {
-			this.y -= 1;
-
+			this.y -= moveSpeed;
+			direction = 2;
 		}
 	}
 
-	public void moveDown(List<Zombie> z) {
+	public void moveDown(List<Zombie> z, List<MapObject> o) {
 		boolean x = true;
 		for(int i = 0; i < z.size(); i++){
 			if(!this.equals(z.get(i))){
-				if(new Rectangle(this.x, this.y + 1, 40, 40).intersects(new Rectangle(z.get(i).getX(), z.get(i).getY(), 40, 40))){
+				if(new Rectangle(this.x, this.y + moveSpeed, 40, 50).intersects(new Rectangle(z.get(i).getX(), z.get(i).getY(), 40, 40))){
 					x = false;
 				}
 			}
 		}
-		if (this.y < 800 && x) {
-			this.y += 1;
+		for(int i = 0; i < o.size(); i++){
+			if(!this.equals(o.get(i))){
+				if(new Rectangle(this.x, this.y + moveSpeed, 40, 50).intersects(new Rectangle(o.get(i).getX(), o.get(i).getY(), o.get(i).getWidth(), o.get(i).getHeight()))){
+					x = false;
+				}
+			}
+		}
+		if (this.y < 750 && x) {
+			this.y += moveSpeed;
+			direction = 0;
 		}
 	}
 	@Override
 	public boolean equals(Object o){
-		if(((Zombie) o).getX() == this.x && ((Zombie) o).getY() == this.y){
+		if(((MapObject) o).getX() == this.x && ((MapObject) o).getY() == this.y){
 			return true;
 		}
 		return false;
+	}
+	
+	public int getDirection(){
+		return direction;
 	}
 
 }

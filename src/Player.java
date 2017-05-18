@@ -5,8 +5,9 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 
 public class Player extends MapObject {
-	private int count = 0;
 	private int direction = 0; // 0 = front, 1 = left, 2 = back, 3 = right
+	private int moveSpeed = 5;
+	private int health = 5;
 	private static Image FaceBack;
 	private static Image FaceFront;
 	private static Image FaceLeft;
@@ -18,13 +19,12 @@ public class Player extends MapObject {
 	private static Image WalkRight;
 	public Player(int x, int y) {
 		super(x, y);
+		setDim(50, 50);
 		initImages();
 	}
 
 	private void initImages() {
 		if (FaceFront == null) {
-			count++;
-			System.out.println("Loading Player images..." + count);
 			try {
 				URL url = getClass().getResource("res/RamboFaceBack.png");
 				FaceBack = ImageIO.read(url);
@@ -130,7 +130,7 @@ public class Player extends MapObject {
 
 	public void moveLeft() {
 		if (x > 0) {
-			x -= 5;
+			x -= moveSpeed;
 			walking = true;
 			direction = 1;
 		}
@@ -138,7 +138,7 @@ public class Player extends MapObject {
 
 	public void moveRight() {
 		if (x < 1150) {
-			x += 5;
+			x += moveSpeed;
 			walking = true;
 			direction = 3;
 		}
@@ -146,15 +146,15 @@ public class Player extends MapObject {
 
 	public void moveUp() {
 		if (y > 5) {
-			y -= 5;
+			y -= moveSpeed;
 			walking = true;
 			direction = 2;
 		}
 	}
 
 	public void moveDown() {
-		if (y < 750) {
-			y += 5;
+		if (y < 700) {
+			y += moveSpeed;
 			walking = true;
 			direction = 0;
 		}
@@ -164,7 +164,23 @@ public class Player extends MapObject {
 		return walking;
 	}
 
+	public int getDirection(){
+		return direction;
+	}
+	
 	public void setWalkingFalse() {
 		walking = false;
+	}
+	
+	public void gotHit(){
+		health--;
+	}
+	
+	public void replenishHealth(){
+		health++;
+	}
+	
+	public int getHealth(){
+		return health;
 	}
 }
