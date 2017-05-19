@@ -1,5 +1,6 @@
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
@@ -17,6 +18,9 @@ public class Player extends MapObject {
 	private static Image WalkFront;
 	private static Image WalkLeft;
 	private static Image WalkRight;
+	private static Image MeleeBack;
+	private static Image MeleeFront;
+	private static Image MeleeRight;
 	public Player(int x, int y) {
 		super(x, y);
 		setDim(50, 50);
@@ -182,5 +186,20 @@ public class Player extends MapObject {
 	
 	public int getHealth(){
 		return health;
+	}
+
+	public Rectangle melee() {
+		// TODO Auto-generated method stub
+		if(direction == 0){
+			return new Rectangle(this.x, this.y, getWidth(), getHeight() + 20);
+		}else if(direction == 1){
+			return new Rectangle(this.x - 20, this.y, getWidth() + 20, getHeight());
+		}else if(direction == 2){
+			return new Rectangle(this.x, this.y - 20, getWidth(), getHeight() + 20);
+		}else if(direction == 3){
+			return new Rectangle(this.x, this.y, getWidth() + 20, getHeight());
+		}else{
+			return null;
+		}
 	}
 }
