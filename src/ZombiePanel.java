@@ -48,7 +48,7 @@ public class ZombiePanel extends JPanel {
 		// TODO Auto-generated method stub
 		int num = (int) ((Math.random() * 10) + 1);
 		for (int i = 0; i < num; i++) {
-			Hut temp = new Hut((int) (Math.random() * 1050), (int) (Math.random() * 650));
+			Hut temp = new Hut((int) (Math.random() * 1050), (int) (Math.random() * 550) + 100);
 			boolean toAdd = true;
 			for (int j = 0; j < blockers.size(); j++) {
 				if (temp.getRect().intersects(blockers.get(j).getRect())) {
@@ -212,12 +212,12 @@ public class ZombiePanel extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		for (int i = 0; i < blockers.size(); i++) {
+			blockers.get(i).draw(g);
+		}
 		for (int i = 0; i < enemies.size(); i++) {
 
 			enemies.get(i).draw(g, myPlayer.getX(), myPlayer.getY());
-		}
-		for (int i = 0; i < blockers.size(); i++) {
-			blockers.get(i).draw(g);
 		}
 		for (int i = 0; i < bullets.size(); i++) {
 			bullets.get(i).draw(g);
@@ -258,14 +258,20 @@ public class ZombiePanel extends JPanel {
 			bullets.get(i).move();
 		}
 		// bullet vs bounds of game
-		for (int i = bullets.size() - 1; i >= 0; i--) {
-			if (bullets.get(i).getX() <= 0 || bullets.get(i).getX() > 1200) {
-				bullets.remove(i);
-			} else if (bullets.get(i).getY() <= 0 || bullets.get(i).getY() > 800) {
-				bullets.remove(i);
-			}
-		}
+		boundBullets();
 		// bullet vs zombies
+		bulletVSZombies();
+		// player vs zombie
+		playerVSZombie();
+		checkHealth();
+		incrementTimes();
+		if(enemies.size() < 1){
+			newLevel();
+		}
+	}
+
+	private void bulletVSZombies() {
+		// TODO Auto-generated method stub
 		for (int i = bullets.size() - 1; i >= 0; i--) {
 			for (int j = enemies.size() - 1; j >= 0; j--) {
 				if (i < bullets.size() && j < enemies.size()) {
@@ -280,32 +286,44 @@ public class ZombiePanel extends JPanel {
 
 			}
 		}
-		// player vs zombie
-		for (int i = 0; i < enemies.size(); i++) {
-			if (enemies.get(i).getRect().intersects(myPlayer.getRect())) {
-				int dir = enemies.get(i).getDirection();
-				if (dir == 0) {
-					for (int z = 0; z < 5; z++)
-						enemies.get(i).moveUp(enemies, blockers);
-				} else if (dir == 1) {
-					for (int z = 0; z < 5; z++)
-						enemies.get(i).moveRight(enemies, blockers);
-				} else if (dir == 2) {
-					for (int z = 0; z < 5; z++)
-						enemies.get(i).moveDown(enemies, blockers);
-				} else if (dir == 3) {
-					for (int z = 0; z < 5; z++)
-						enemies.get(i).moveLeft(enemies, blockers);
-				}
-				myPlayer.gotHit();
-			}
-		}
+	}
+
+	private void checkHealth() {
+		// TODO Auto-generated method stub
 		if (myPlayer.getHealth() <= 0) {
 			t.stop();
 			JOptionPane.showMessageDialog(null, "Score: " + score + "\nLevel: " + level, "You Lose!",
 					JOptionPane.ERROR_MESSAGE);
 		}
-		incrementTimes();
+	}
+
+	private void boundBullets() {
+		// TODO Auto-generated method stub
+		for (int i = bullets.size() - 1; i >= 0; i--) {
+			if (bullets.get(i).getX() <= 0 || bullets.get(i).getX() > 1200) {
+				bullets.remove(i);
+			} else if (bullets.get(i).getY() <= 0 || bullets.get(i).getY() > 800) {
+				bullets.remove(i);
+			}
+		}
+	}
+
+	private void playerVSZombie() {
+		// TODO Auto-generated method stub
+		for (int i = 0; i < enemies.size(); i++) {
+			if (enemies.get(i).getRect().intersects(myPlayer.getRect())) {
+				enemies.get(i).knockBack();
+				myPlayer.gotHit();
+				//enemies.get
+			}
+		}
+	}
+
+	private void newLevel() {
+		// TODO Auto-generated method stub
+		level++;
+		addEnemies();
+		bullets.addAmmo(level);
 	}
 
 	private void incrementTimes() {

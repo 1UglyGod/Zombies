@@ -12,9 +12,13 @@ public class Zombie extends MapObject {
 	private static Image WalkFront;
 	private static Image WalkLeft;
 	private static Image WalkRight;
-	private final int moveSpeed = 1;
+	private final double moveSpeed = .5;
+	private double xVal;
+	private double yVal;
+
 	public Zombie(int x, int y) {
 		super(x, y);
+		xVal = x;
 		setDim(50, 50);
 		// find way to reference a player
 		initImages();
@@ -26,8 +30,7 @@ public class Zombie extends MapObject {
 				URL url = getClass().getResource("res/skeleBack.png");
 				WalkBack = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out
-						.println("Image could not be opened:res/skeleBack.png");
+				System.out.println("Image could not be opened:res/skeleBack.png");
 				e.printStackTrace();
 			}
 
@@ -35,8 +38,7 @@ public class Zombie extends MapObject {
 				URL url = getClass().getResource("res/skeleFront.png");
 				WalkFront = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out
-						.println("Image could not be opened:res/skeleFront.png");
+				System.out.println("Image could not be opened:res/skeleFront.png");
 				e.printStackTrace();
 			}
 
@@ -44,8 +46,7 @@ public class Zombie extends MapObject {
 				URL url = getClass().getResource("res/skeleLeft.png");
 				WalkLeft = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out
-						.println("Image could not be opened:res/skeleLeft.png");
+				System.out.println("Image could not be opened:res/skeleLeft.png");
 				e.printStackTrace();
 			}
 
@@ -53,8 +54,7 @@ public class Zombie extends MapObject {
 				URL url = getClass().getResource("res/skeleRight.png");
 				WalkRight = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out
-						.println("Image could not be opened:res/skeleRight.png");
+				System.out.println("Image could not be opened:res/skeleRight.png");
 				e.printStackTrace();
 			}
 		}
@@ -82,100 +82,129 @@ public class Zombie extends MapObject {
 
 	public void moveLeft(List<Zombie> z, List<MapObject> o) {
 		boolean x = true;
-		for(int i = 0; i < z.size(); i++){
-			if(!this.equals(z.get(i))){
-				if(new Rectangle(this.x - moveSpeed, this.y, 40, 40).intersects(new Rectangle(z.get(i).getX(), z.get(i).getY(), 40, 40))){
+		for (int i = 0; i < z.size(); i++) {
+			if (!this.equals(z.get(i))) {
+				if (new Rectangle((int) (xVal - moveSpeed), this.y, 40, 40)
+						.intersects(new Rectangle(z.get(i).getX(), z.get(i).getY(), 40, 40))) {
 					x = false;
 				}
 			}
 		}
-		for(int i = 0; i < o.size(); i++){
-			if(!this.equals(o.get(i))){
-				if(new Rectangle(this.x - moveSpeed, this.y, 40, 40).intersects(new Rectangle(o.get(i).getX(), o.get(i).getY(), o.get(i).getWidth(), o.get(i).getHeight()))){
+		for (int i = 0; i < o.size(); i++) {
+			if (!this.equals(o.get(i))) {
+				if (new Rectangle((int) (xVal - moveSpeed), this.y, 40, 40).intersects(
+						new Rectangle(o.get(i).getX(), o.get(i).getY(), o.get(i).getWidth(), o.get(i).getHeight()))) {
 					x = false;
 				}
 			}
 		}
 		if (this.x > 0 && x) {
-			this.x -= moveSpeed;
+			this.xVal -= moveSpeed;
+			this.x = (int) xVal;
 			direction = 1;
 		}
 	}
 
 	public void moveRight(List<Zombie> z, List<MapObject> o) {
 		boolean x = true;
-		for(int i = 0; i < z.size(); i++){
-			if(!this.equals(z.get(i))){
-				if(new Rectangle(this.x + moveSpeed, this.y, 40, 40).intersects(new Rectangle(z.get(i).getX(), z.get(i).getY(), 40, 40))){
+		for (int i = 0; i < z.size(); i++) {
+			if (!this.equals(z.get(i))) {
+				if (new Rectangle((int) (xVal + moveSpeed), this.y, 40, 40)
+						.intersects(new Rectangle(z.get(i).getX(), z.get(i).getY(), 40, 40))) {
 					x = false;
 				}
 			}
 		}
-		for(int i = 0; i < o.size(); i++){
-			if(!this.equals(o.get(i))){
-				if(new Rectangle(this.x + moveSpeed, this.y, 40, 40).intersects(new Rectangle(o.get(i).getX(), o.get(i).getY(), o.get(i).getWidth(), o.get(i).getHeight()))){
+		for (int i = 0; i < o.size(); i++) {
+			if (!this.equals(o.get(i))) {
+				if (new Rectangle((int) (xVal + moveSpeed), this.y, 40, 40).intersects(
+						new Rectangle(o.get(i).getX(), o.get(i).getY(), o.get(i).getWidth(), o.get(i).getHeight()))) {
 					x = false;
 				}
 			}
 		}
 		if (this.x < 1200 && x) {
-			this.x += moveSpeed;
+			this.xVal += moveSpeed;
+			this.x = (int) this.xVal;
 			direction = 3;
 		}
 	}
 
 	public void moveUp(List<Zombie> z, List<MapObject> o) {
 		boolean x = true;
-		for(int i = 0; i < z.size(); i++){
-			if(!this.equals(z.get(i))){
-				if(new Rectangle(this.x, this.y - moveSpeed, 40, 40).intersects(new Rectangle(z.get(i).getX(), z.get(i).getY(), 40, 40))){
+		for (int i = 0; i < z.size(); i++) {
+			if (!this.equals(z.get(i))) {
+				if (new Rectangle(this.x, (int) (yVal - moveSpeed), 40, 40)
+						.intersects(new Rectangle(z.get(i).getX(), z.get(i).getY(), 40, 40))) {
 					x = false;
 				}
 			}
 		}
-		for(int i = 0; i < o.size(); i++){
-			if(!this.equals(o.get(i))){
-				if(new Rectangle(this.x, this.y - moveSpeed, 40, 40).intersects(new Rectangle(o.get(i).getX(), o.get(i).getY(), o.get(i).getWidth(), o.get(i).getHeight()))){
+		for (int i = 0; i < o.size(); i++) {
+			if (!this.equals(o.get(i))) {
+				if (new Rectangle(this.x, (int) (yVal - moveSpeed), 40, 40).intersects(
+						new Rectangle(o.get(i).getX(), o.get(i).getY(), o.get(i).getWidth(), o.get(i).getHeight()))) {
 					x = false;
 				}
 			}
 		}
 		if (this.y > 0 && x) {
-			this.y -= moveSpeed;
+			this.yVal -= moveSpeed;
+			this.y = (int) this.yVal;
 			direction = 2;
 		}
 	}
 
 	public void moveDown(List<Zombie> z, List<MapObject> o) {
 		boolean x = true;
-		for(int i = 0; i < z.size(); i++){
-			if(!this.equals(z.get(i))){
-				if(new Rectangle(this.x, this.y + moveSpeed, 40, 50).intersects(new Rectangle(z.get(i).getX(), z.get(i).getY(), 40, 40))){
+		for (int i = 0; i < z.size(); i++) {
+			if (!this.equals(z.get(i))) {
+				if (new Rectangle(this.x, (int) (yVal + moveSpeed), 40, 50)
+						.intersects(new Rectangle(z.get(i).getX(), z.get(i).getY(), 40, 40))) {
 					x = false;
 				}
 			}
 		}
-		for(int i = 0; i < o.size(); i++){
-			if(!this.equals(o.get(i))){
-				if(new Rectangle(this.x, this.y + moveSpeed, 40, 50).intersects(new Rectangle(o.get(i).getX(), o.get(i).getY(), o.get(i).getWidth(), o.get(i).getHeight()))){
+		for (int i = 0; i < o.size(); i++) {
+			if (!this.equals(o.get(i))) {
+				if (new Rectangle(this.x,(int) (yVal + moveSpeed), 40, 50).intersects(
+						new Rectangle(o.get(i).getX(), o.get(i).getY(), o.get(i).getWidth(), o.get(i).getHeight()))) {
 					x = false;
 				}
 			}
 		}
 		if (this.y < 750 && x) {
-			this.y += moveSpeed;
+			this.yVal += moveSpeed;
+			this.y = (int) this.yVal;
 			direction = 0;
 		}
 	}
+
+	public void knockBack() {
+		if (direction == 0) {
+			y -= 15;
+			yVal -= 15;
+		} else if (direction == 1) {
+			x += 15;
+			xVal += 15;
+		} else if (direction == 2) {
+			y += 15;
+			yVal += 15;
+		} else if (direction == 3) {
+			x -= 15;
+			xVal -= 15;
+		}
+	}
+
 	@Override
-	public boolean equals(Object o){
-		if(((MapObject) o).getX() == this.x && ((MapObject) o).getY() == this.y){
+	public boolean equals(Object o) {
+		if (((MapObject) o).getX() == this.x && ((MapObject) o).getY() == this.y) {
 			return true;
 		}
 		return false;
 	}
-	
-	public int getDirection(){
+
+	public int getDirection() {
 		return direction;
 	}
 

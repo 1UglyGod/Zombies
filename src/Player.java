@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 public class Player extends MapObject {
 	private int direction = 0; // 0 = front, 1 = left, 2 = back, 3 = right
 	private int moveSpeed = 5;
-	private int health = 5;
+	private int health = 15;
 	private static Image FaceBack;
 	private static Image FaceFront;
 	private static Image FaceLeft;

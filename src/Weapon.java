@@ -21,4 +21,8 @@ public class Weapon extends ArrayList<Bullet>{
 	public int showCapacity(){
 		return capacity;
 	}
+	
+	public void addAmmo(int level){
+		capacity += (level * 10);
+	}
 }
