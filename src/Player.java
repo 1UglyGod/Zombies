@@ -14,6 +14,7 @@ public class Player extends MapObject {
 	private static Image FaceLeft;
 	private static Image FaceRight;
 	private boolean walking = false;
+	private boolean melee = false;
 	private static Image WalkBack;
 	private static Image WalkFront;
 	private static Image WalkLeft;
@@ -21,6 +22,8 @@ public class Player extends MapObject {
 	private static Image MeleeBack;
 	private static Image MeleeFront;
 	private static Image MeleeRight;
+	private static Image MeleeLeft;
+
 	public Player(int x, int y) {
 		super(x, y);
 		setDim(50, 50);
@@ -33,95 +36,124 @@ public class Player extends MapObject {
 				URL url = getClass().getResource("res/RamboFaceBack.png");
 				FaceBack = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out
-						.println("Image could not be opened: res/RamboFaceBack.png");
+				System.out.println("Image could not be opened: res/RamboFaceBack.png");
 				e.printStackTrace();
 			}
 			try {
 				URL url = getClass().getResource("res/RamboWalkBack.png");
 				WalkBack = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out
-						.println("Image could not be opened: res/RamboWalkBack.png");
+				System.out.println("Image could not be opened: res/RamboWalkBack.png");
 				e.printStackTrace();
 			}
 			try {
 				URL url = getClass().getResource("res/RamboFaceFront.png");
 				FaceFront = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out
-						.println("Image could not be opened: res/RamboFaceFront.png");
+				System.out.println("Image could not be opened: res/RamboFaceFront.png");
 				e.printStackTrace();
 			}
 			try {
 				URL url = getClass().getResource("res/RamboWalkFront.png");
 				WalkFront = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out
-						.println("Image could not be opened: res/RamboWalkFront.png");
+				System.out.println("Image could not be opened: res/RamboWalkFront.png");
 				e.printStackTrace();
 			}
 			try {
 				URL url = getClass().getResource("res/RamboFaceLeft.png");
 				FaceLeft = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out
-						.println("Image could not be opened: res/RamboFaceLeft.png");
+				System.out.println("Image could not be opened: res/RamboFaceLeft.png");
 				e.printStackTrace();
 			}
 			try {
 				URL url = getClass().getResource("res/RamboWalkLeft.png");
 				WalkLeft = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out
-						.println("Image could not be opened: res/RamboWalkLeft.png");
+				System.out.println("Image could not be opened: res/RamboWalkLeft.png");
 				e.printStackTrace();
 			}
 			try {
 				URL url = getClass().getResource("res/RamboFaceRight.png");
 				FaceRight = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out
-						.println("Image could not be opened: res/RamboFaceRight.png");
+				System.out.println("Image could not be opened: res/RamboFaceRight.png");
 				e.printStackTrace();
 			}
 			try {
 				URL url = getClass().getResource("res/RamboWalkRight.png");
 				WalkRight = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out
-						.println("Image could not be opened: res/RamboWalkRight.png");
+				System.out.println("Image could not be opened: res/RamboWalkRight.png");
 				e.printStackTrace();
 			}
+			try {
+				URL url = getClass().getResource("res/RamboMacheteRight.png");
+				MeleeRight = ImageIO.read(url);
+			} catch (Exception e) {
+				System.out.println("Image could not be opened: res/RamboMacheteRight.png");
+				e.printStackTrace();
+			}
+			try {
+				URL url = getClass().getResource("res/RamboMacheteLeft.png");
+				MeleeLeft = ImageIO.read(url);
+			} catch (Exception e) {
+				System.out.println("Image could not be opened: res/RamboMacheteLeft.png");
+				e.printStackTrace();
+			}
+			try {
+				URL url = getClass().getResource("res/RamboMacheteFront.png");
+				MeleeFront = ImageIO.read(url);
+			} catch (Exception e) {
+				System.out.println("Image could not be opened: res/RamboMacheteFront.png");
+				e.printStackTrace();
+			}
+			try {
+				URL url = getClass().getResource("res/RamboMacheteBack.png");
+				MeleeBack = ImageIO.read(url);
+			} catch (Exception e) {
+				System.out.println("Image could not be opened: res/RamboMacheteBack.png");
+				e.printStackTrace();
+			}
+
 		}
 	}
 
 	public void draw(Graphics g) {
 		switch (direction) {
 		case 0:
-			if (!walking) {
+			if (!walking && !melee) {
 				g.drawImage(FaceFront, x, y, null);
+			} else if (melee) {
+				g.drawImage(MeleeFront, x, y, null);
 			} else {
 				g.drawImage(WalkFront, x, y, null);
 			}
 			break;
 		case 1:
-			if (!walking) {
+			if (!walking && !melee) {
 				g.drawImage(FaceLeft, x, y, null);
+			} else if (melee) {
+				g.drawImage(MeleeLeft, x, y, null);
 			} else {
 				g.drawImage(WalkLeft, x, y, null);
 			}
 			break;
 		case 2:
-			if (!walking) {
+			if (!walking && !melee) {
 				g.drawImage(FaceBack, x, y, null);
+			} else if (melee) {
+				g.drawImage(MeleeBack, x, y, null);
 			} else {
 				g.drawImage(WalkBack, x, y, null);
 			}
 			break;
 		case 3:
-			if (!walking) {
+			if (!walking && !melee) {
 				g.drawImage(FaceRight, x, y, null);
+			} else if (melee) {
+				g.drawImage(MeleeRight, x, y, null);
 			} else {
 				g.drawImage(WalkRight, x, y, null);
 			}
@@ -168,38 +200,53 @@ public class Player extends MapObject {
 		return walking;
 	}
 
-	public int getDirection(){
+	public int getDirection() {
 		return direction;
 	}
-	
+
 	public void setWalkingFalse() {
 		walking = false;
 	}
-	
-	public void gotHit(){
+
+	public void gotHit() {
 		health--;
 	}
-	
-	public void replenishHealth(){
+
+	public void replenishHealth() {
 		health++;
 	}
-	
-	public int getHealth(){
+
+	public int getHealth() {
 		return health;
 	}
 
 	public Rectangle melee() {
 		// TODO Auto-generated method stub
-		if(direction == 0){
-			return new Rectangle(this.x, this.y, getWidth(), getHeight() + 20);
-		}else if(direction == 1){
-			return new Rectangle(this.x - 20, this.y, getWidth() + 20, getHeight());
-		}else if(direction == 2){
-			return new Rectangle(this.x, this.y - 20, getWidth(), getHeight() + 20);
-		}else if(direction == 3){
-			return new Rectangle(this.x, this.y, getWidth() + 20, getHeight());
-		}else{
+		if (direction == 0) {
+			return new Rectangle(this.x, this.y + 50, getWidth(), 35);
+		} else if (direction == 1) {
+			return new Rectangle(this.x - 35, this.y, 35, getHeight());
+		} else if (direction == 2) {
+			return new Rectangle(this.x, this.y - 35, getWidth(), 35);
+		} else if (direction == 3) {
+			return new Rectangle(this.x + 50, this.y, 35, getHeight());
+		} else {
 			return null;
 		}
+	}
+
+	public void setMeleeTrue() {
+		// TODO Auto-generated method stub
+		moveSpeed = 1;
+		melee = true;
+	}
+
+	public void setMeleeFalse() {
+		// TODO Auto-generated method stub
+		moveSpeed = 5;
+		melee = false;
+	}
+	public boolean getMeleeStatus(){
+		return melee;
 	}
 }

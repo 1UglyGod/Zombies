@@ -23,16 +23,18 @@ public class ZombiePanel extends JPanel {
 	private List<MapObject> blockers;
 	private Weapon bullets = new Weapon();
 	private Player myPlayer;
-	private Timer t, t2;
+	private Timer t, t2, t3;
 	private boolean upPressed;
 	private boolean downPressed;
 	private boolean rightPressed;
 	private boolean leftPressed;
-	private boolean spacePressed;
+	private boolean meleePressed;
 	private boolean checkStart = false;
+	private boolean checkStartMelee = false;
 	private int level = 1;
 	private int score = 0;
 	private int hutTime = 10;
+	private int meleeTime = 2;
 	private Random rand = new Random();
 
 	public ZombiePanel() {
@@ -74,20 +76,20 @@ public class ZombiePanel extends JPanel {
 			int randY = rand.nextInt(800);
 			Zombie enemy = new Zombie(randX, randY);
 			boolean toAdd = true;
-//			for (int j = 0; j < blockers.size(); j++) {
-//				if (enemy.getRect().intersects(blockers.get(j).getRect())) {
-//					toAdd = false;
-//					val++;
-//					break;
-//				}
-//			}
-//			for (int i = 0; i < enemies.size(); i++) {
-//				if (enemy.getRect().intersects(enemies.get(i).getRect())) {
-//					toAdd = false;
-//					val++;
-//					break;
-//				}
-//			}
+			// for (int j = 0; j < blockers.size(); j++) {
+			// if (enemy.getRect().intersects(blockers.get(j).getRect())) {
+			// toAdd = false;
+			// val++;
+			// break;
+			// }
+			// }
+			// for (int i = 0; i < enemies.size(); i++) {
+			// if (enemy.getRect().intersects(enemies.get(i).getRect())) {
+			// toAdd = false;
+			// val++;
+			// break;
+			// }
+			// }
 			if (toAdd) {
 				enemies.add(enemy);
 			}
@@ -113,7 +115,13 @@ public class ZombiePanel extends JPanel {
 		
 		this.getActionMap().put("beginMelee", new AbstractAction(){
 			public void actionPerformed(ActionEvent e){
-				melee();
+				meleePressed = true;
+			}
+		});
+		
+		this.getActionMap().put("endMelee", new AbstractAction(){
+			public void actionPerformed(ActionEvent e){
+				meleePressed = false;
 			}
 		});
 		
@@ -219,15 +227,24 @@ public class ZombiePanel extends JPanel {
 		});
 		t2 = new Timer(1000, new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0){
+			public void actionPerformed(ActionEvent arg0) {
 				hutTime--;
-				if(hutTime < 0){
+				if (hutTime < 0) {
+					myPlayer.gotHit();
+				}
+			}
+		});
+		t3 = new Timer(1000, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				meleeTime--;
+				if (meleeTime < 0) {
 					myPlayer.gotHit();
 				}
 			}
 		});
 		t.start();
-		
+
 	}
 
 	@Override
@@ -249,10 +266,14 @@ public class ZombiePanel extends JPanel {
 		g.drawString("Level: " + level, 1000, 25);
 		g.drawString("Ammo: " + bullets.showCapacity(), 1000, 40);
 		g.drawString("Health: " + myPlayer.getHealth(), 1000, 55);
-		if(checkStart){
+		if (checkStart) {
 			g.drawString("Time Left in Safe Zone: " + hutTime, 1000, 70);
 		}
-		
+		if(checkStartMelee && !checkStart){
+			g.drawString("Time Left to Melee: " + meleeTime, 1000, 70);
+		}else if(checkStartMelee){
+			g.drawString("Time Left to Melee: " + meleeTime, 1000, 85);
+		}
 
 	}
 
@@ -273,8 +294,11 @@ public class ZombiePanel extends JPanel {
 		if (!leftPressed && !rightPressed && !downPressed && !upPressed) {
 			myPlayer.setWalkingFalse();
 		}
-		if (spacePressed) {
-
+		if (meleePressed) {
+			melee();
+			myPlayer.setMeleeTrue();
+		}else{
+			myPlayer.setMeleeFalse();
 		}
 		for (int i = 0; i < enemies.size(); i++) {
 			zombieFollow(enemies.get(i));
@@ -288,40 +312,55 @@ public class ZombiePanel extends JPanel {
 		bulletVSZombies();
 		// player vs zombie
 		playerVSZombie();
-		//player/house relationship
+		// player/house relationship
 		playerInHouse();
+		//check if player is meleeing too long
+		playerIsMelee();
 		checkHealth();
 		incrementTimes();
-		if(enemies.size() < 1){
+		if (enemies.size() < 1) {
 			newLevel();
 		}
 	}
 
 	private void playerInHouse() {
 		// TODO Auto-generated method stub
-		if(!checkStart){
-			for(int i = 0; i < blockers.size(); i++){
-				if(blockers.get(i).getRect().intersects(myPlayer.getRect())){
+		if (!checkStart) {
+			for (int i = 0; i < blockers.size(); i++) {
+				if (blockers.get(i).getRect().intersects(myPlayer.getRect())) {
 					hutTime = 10;
 					t2.start();
 					checkStart = true;
 					break;
-					
+
 				}
 			}
-		}else{
+		} else {
 			boolean checkToEnd = true;
-			for(int i = 0; i < blockers.size(); i++){
-				if(blockers.get(i).getRect().intersects(myPlayer.getRect())){
+			for (int i = 0; i < blockers.size(); i++) {
+				if (blockers.get(i).getRect().intersects(myPlayer.getRect())) {
 					checkToEnd = false;
 					break;
-					
+
 				}
 			}
-			if(checkToEnd){
+			if (checkToEnd) {
 				t2.stop();
 				checkStart = false;
 			}
+		}
+	}
+	
+	public void playerIsMelee(){
+		if(myPlayer.getMeleeStatus() && !checkStartMelee){
+			meleeTime = 2;
+			t3.start();
+			checkStartMelee = true;
+		}
+		
+		if(!myPlayer.getMeleeStatus() && checkStartMelee){
+			t3.stop();
+			checkStartMelee = false;
 		}
 	}
 
@@ -336,7 +375,7 @@ public class ZombiePanel extends JPanel {
 						score += 100;
 						bullets.remove(i);
 						enemies.remove(j);
-						
+
 					}
 				}
 
@@ -366,9 +405,9 @@ public class ZombiePanel extends JPanel {
 
 	private void playerVSZombie() {
 		// TODO Auto-generated method stub
-		for (int i = enemies.size()-1; i >= 0; i--) {
+		for (int i = enemies.size() - 1; i >= 0; i--) {
 			if (enemies.get(i).getRect().intersects(myPlayer.getRect())) {
-				//enemies.get(i).knockBack();
+				// enemies.get(i).knockBack();
 				enemies.remove(i);
 				myPlayer.gotHit();
 			}
@@ -400,11 +439,12 @@ public class ZombiePanel extends JPanel {
 			z.moveDown(enemies, blockers);
 		}
 	}
-	
-	public void melee(){
-		for(int i = enemies.size()-1; i >= 0; i--){
-			if(myPlayer.melee().intersects(enemies.get(i).getRect())){
+
+	public void melee() {
+		for (int i = enemies.size() - 1; i >= 0; i--) {
+			if (myPlayer.melee().intersects(enemies.get(i).getRect())) {
 				enemies.remove(i);
+				score += 100;
 			}
 		}
 	}
