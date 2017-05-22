@@ -9,6 +9,7 @@ public class Player extends MapObject {
 	private int direction = 0; // 0 = front, 1 = left, 2 = back, 3 = right
 	private int moveSpeed = 5;
 	private int health = 15;
+	private final int size = 40;
 	private static Image FaceBack;
 	private static Image FaceFront;
 	private static Image FaceLeft;
@@ -26,7 +27,7 @@ public class Player extends MapObject {
 
 	public Player(int x, int y) {
 		super(x, y);
-		setDim(50, 50);
+		setDim(40, 40);
 		initImages();
 	}
 
@@ -36,84 +37,96 @@ public class Player extends MapObject {
 				URL url = getClass().getResource("res/RamboFaceBack.png");
 				FaceBack = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out.println("Image could not be opened: res/RamboFaceBack.png");
+				System.out
+						.println("Image could not be opened: res/RamboFaceBack.png");
 				e.printStackTrace();
 			}
 			try {
 				URL url = getClass().getResource("res/RamboWalkBack.png");
 				WalkBack = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out.println("Image could not be opened: res/RamboWalkBack.png");
+				System.out
+						.println("Image could not be opened: res/RamboWalkBack.png");
 				e.printStackTrace();
 			}
 			try {
 				URL url = getClass().getResource("res/RamboFaceFront.png");
 				FaceFront = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out.println("Image could not be opened: res/RamboFaceFront.png");
+				System.out
+						.println("Image could not be opened: res/RamboFaceFront.png");
 				e.printStackTrace();
 			}
 			try {
 				URL url = getClass().getResource("res/RamboWalkFront.png");
 				WalkFront = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out.println("Image could not be opened: res/RamboWalkFront.png");
+				System.out
+						.println("Image could not be opened: res/RamboWalkFront.png");
 				e.printStackTrace();
 			}
 			try {
 				URL url = getClass().getResource("res/RamboFaceLeft.png");
 				FaceLeft = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out.println("Image could not be opened: res/RamboFaceLeft.png");
+				System.out
+						.println("Image could not be opened: res/RamboFaceLeft.png");
 				e.printStackTrace();
 			}
 			try {
 				URL url = getClass().getResource("res/RamboWalkLeft.png");
 				WalkLeft = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out.println("Image could not be opened: res/RamboWalkLeft.png");
+				System.out
+						.println("Image could not be opened: res/RamboWalkLeft.png");
 				e.printStackTrace();
 			}
 			try {
 				URL url = getClass().getResource("res/RamboFaceRight.png");
 				FaceRight = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out.println("Image could not be opened: res/RamboFaceRight.png");
+				System.out
+						.println("Image could not be opened: res/RamboFaceRight.png");
 				e.printStackTrace();
 			}
 			try {
 				URL url = getClass().getResource("res/RamboWalkRight.png");
 				WalkRight = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out.println("Image could not be opened: res/RamboWalkRight.png");
+				System.out
+						.println("Image could not be opened: res/RamboWalkRight.png");
 				e.printStackTrace();
 			}
 			try {
 				URL url = getClass().getResource("res/RamboMacheteRight.png");
 				MeleeRight = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out.println("Image could not be opened: res/RamboMacheteRight.png");
+				System.out
+						.println("Image could not be opened: res/RamboMacheteRight.png");
 				e.printStackTrace();
 			}
 			try {
 				URL url = getClass().getResource("res/RamboMacheteLeft.png");
 				MeleeLeft = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out.println("Image could not be opened: res/RamboMacheteLeft.png");
+				System.out
+						.println("Image could not be opened: res/RamboMacheteLeft.png");
 				e.printStackTrace();
 			}
 			try {
 				URL url = getClass().getResource("res/RamboMacheteFront.png");
 				MeleeFront = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out.println("Image could not be opened: res/RamboMacheteFront.png");
+				System.out
+						.println("Image could not be opened: res/RamboMacheteFront.png");
 				e.printStackTrace();
 			}
 			try {
 				URL url = getClass().getResource("res/RamboMacheteBack.png");
 				MeleeBack = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out.println("Image could not be opened: res/RamboMacheteBack.png");
+				System.out
+						.println("Image could not be opened: res/RamboMacheteBack.png");
 				e.printStackTrace();
 			}
 
@@ -124,38 +137,38 @@ public class Player extends MapObject {
 		switch (direction) {
 		case 0:
 			if (!walking && !melee) {
-				g.drawImage(FaceFront, x, y, null);
+				g.drawImage(FaceFront, x, y, size, size, null);
 			} else if (melee) {
-				g.drawImage(MeleeFront, x, y, null);
+				g.drawImage(MeleeFront, x, y, size, size, null);
 			} else {
-				g.drawImage(WalkFront, x, y, null);
+				g.drawImage(WalkFront, x, y, size, size, null);
 			}
 			break;
 		case 1:
 			if (!walking && !melee) {
-				g.drawImage(FaceLeft, x, y, null);
+				g.drawImage(FaceLeft, x, y, size, size, null);
 			} else if (melee) {
-				g.drawImage(MeleeLeft, x, y, null);
+				g.drawImage(MeleeLeft, x, y, size, size, null);
 			} else {
-				g.drawImage(WalkLeft, x, y, null);
+				g.drawImage(WalkLeft, x, y, size, size, null);
 			}
 			break;
 		case 2:
 			if (!walking && !melee) {
-				g.drawImage(FaceBack, x, y, null);
+				g.drawImage(FaceBack, x, y, size, size, null);
 			} else if (melee) {
-				g.drawImage(MeleeBack, x, y, null);
+				g.drawImage(MeleeBack, x, y, size, size, null);
 			} else {
-				g.drawImage(WalkBack, x, y, null);
+				g.drawImage(WalkBack, x, y, size, size, null);
 			}
 			break;
 		case 3:
 			if (!walking && !melee) {
-				g.drawImage(FaceRight, x, y, null);
+				g.drawImage(FaceRight, x, y, size, size, null);
 			} else if (melee) {
-				g.drawImage(MeleeRight, x, y, null);
+				g.drawImage(MeleeRight, x, y, size, size, null);
 			} else {
-				g.drawImage(WalkRight, x, y, null);
+				g.drawImage(WalkRight, x, y, size, size, null);
 			}
 			break;
 		default:
@@ -173,7 +186,7 @@ public class Player extends MapObject {
 	}
 
 	public void moveRight() {
-		if (x < 1150) {
+		if (x < 1160) {
 			x += moveSpeed;
 			walking = true;
 			direction = 3;
@@ -189,7 +202,7 @@ public class Player extends MapObject {
 	}
 
 	public void moveDown() {
-		if (y < 700) {
+		if (y < 710) {
 			y += moveSpeed;
 			walking = true;
 			direction = 0;
@@ -246,7 +259,8 @@ public class Player extends MapObject {
 		moveSpeed = 5;
 		melee = false;
 	}
-	public boolean getMeleeStatus(){
+
+	public boolean getMeleeStatus() {
 		return melee;
 	}
 }

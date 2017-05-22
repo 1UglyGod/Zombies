@@ -1,12 +1,16 @@
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.awt.Image;
 
+import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -36,17 +40,29 @@ public class ZombiePanel extends JPanel {
 	private int hutTime = 10;
 	private int meleeTime = 2;
 	private Random rand = new Random();
-
+	private Image map;
 	public ZombiePanel() {
 		this.setSize(1200, 800);
 		this.setBackground(Color.black);
 		myPlayer = new Player(10, 20);
 		enemies = new ArrayList();
 		blockers = new ArrayList();
+		openMap();
 		addEnemies();
 		addBlockers();
 		setUpTimer();
 		setUpKeyBindings();
+	}
+
+	private void openMap() {
+		// TODO Auto-generated method stub
+		try {
+			URL url = getClass().getResource("res/map.png");
+			map = ImageIO.read(url);
+		} catch (Exception e) {
+			System.out.println("Image could not be opened: res/map.png");
+			e.printStackTrace();
+		}
 	}
 
 	private void addBlockers() {
@@ -250,9 +266,8 @@ public class ZombiePanel extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		for (int i = 0; i < blockers.size(); i++) {
-			blockers.get(i).draw(g);
-		}
+		g.drawImage(map, 0, 0, null);
+		
 		for (int i = 0; i < enemies.size(); i++) {
 
 			enemies.get(i).draw(g, myPlayer.getX(), myPlayer.getY());
@@ -261,6 +276,10 @@ public class ZombiePanel extends JPanel {
 			bullets.get(i).draw(g);
 		}
 		myPlayer.draw(g);
+		for (int i = 0; i < blockers.size(); i++) {
+			blockers.get(i).draw(g);
+		}
+		Font font = new Font("Verdana", Font.BOLD, 12);
 		g.setColor(Color.white);
 		g.drawString("Score: " + score, 1000, 10);
 		g.drawString("Level: " + level, 1000, 25);

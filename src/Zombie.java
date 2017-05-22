@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 
 public class Zombie extends MapObject {
 	private int direction = 0;
+	private final int size = 40;
 	private static Image WalkBack;
 	private static Image WalkFront;
 	private static Image WalkLeft;
@@ -19,7 +20,7 @@ public class Zombie extends MapObject {
 	public Zombie(int x, int y) {
 		super(x, y);
 		xVal = x;
-		setDim(50, 50);
+		setDim(40, 40);
 		// find way to reference a player
 		initImages();
 	}
@@ -30,7 +31,8 @@ public class Zombie extends MapObject {
 				URL url = getClass().getResource("res/skeleBack.png");
 				WalkBack = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out.println("Image could not be opened:res/skeleBack.png");
+				System.out
+						.println("Image could not be opened:res/skeleBack.png");
 				e.printStackTrace();
 			}
 
@@ -38,7 +40,8 @@ public class Zombie extends MapObject {
 				URL url = getClass().getResource("res/skeleFront.png");
 				WalkFront = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out.println("Image could not be opened:res/skeleFront.png");
+				System.out
+						.println("Image could not be opened:res/skeleFront.png");
 				e.printStackTrace();
 			}
 
@@ -46,7 +49,8 @@ public class Zombie extends MapObject {
 				URL url = getClass().getResource("res/skeleLeft.png");
 				WalkLeft = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out.println("Image could not be opened:res/skeleLeft.png");
+				System.out
+						.println("Image could not be opened:res/skeleLeft.png");
 				e.printStackTrace();
 			}
 
@@ -54,7 +58,8 @@ public class Zombie extends MapObject {
 				URL url = getClass().getResource("res/skeleRight.png");
 				WalkRight = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out.println("Image could not be opened:res/skeleRight.png");
+				System.out
+						.println("Image could not be opened:res/skeleRight.png");
 				e.printStackTrace();
 			}
 		}
@@ -63,18 +68,18 @@ public class Zombie extends MapObject {
 	public void draw(Graphics g, int x, int y) {
 		if (Math.abs(y - this.getY()) > Math.abs(x - this.getX())) {
 			if (y > this.getY()) {
-				g.drawImage(WalkFront, this.x, this.y, null);
+				g.drawImage(WalkFront, this.x, this.y, size, size, null);
 
 			} else {
-				g.drawImage(WalkBack, this.x, this.y, null);
+				g.drawImage(WalkBack, this.x, this.y, size, size, null);
 			}
 		}
 
 		if (Math.abs(y - this.getY()) < Math.abs(x - this.getX())) {
 			if (x > this.getX()) {
-				g.drawImage(WalkRight, this.x, this.y, null);
+				g.drawImage(WalkRight, this.x, this.y, size, size, null);
 			} else {
-				g.drawImage(WalkLeft, this.x, this.y, null);
+				g.drawImage(WalkLeft, this.x, this.y, size, size, null);
 			}
 		}
 
@@ -85,15 +90,18 @@ public class Zombie extends MapObject {
 		for (int i = 0; i < z.size(); i++) {
 			if (!this.equals(z.get(i))) {
 				if (new Rectangle((int) (xVal - moveSpeed), this.y, 40, 40)
-						.intersects(new Rectangle(z.get(i).getX(), z.get(i).getY(), 40, 40))) {
+						.intersects(new Rectangle(z.get(i).getX(), z.get(i)
+								.getY(), 40, 40))) {
 					x = false;
 				}
 			}
 		}
 		for (int i = 0; i < o.size(); i++) {
 			if (!this.equals(o.get(i))) {
-				if (new Rectangle((int) (xVal - moveSpeed), this.y, 40, 40).intersects(
-						new Rectangle(o.get(i).getX(), o.get(i).getY(), o.get(i).getWidth(), o.get(i).getHeight()))) {
+				if (new Rectangle((int) (xVal - moveSpeed), this.y, 40, 40)
+						.intersects(new Rectangle(o.get(i).getX(), o.get(i)
+								.getY(), o.get(i).getWidth(), o.get(i)
+								.getHeight()))) {
 					x = false;
 				}
 			}
@@ -110,15 +118,18 @@ public class Zombie extends MapObject {
 		for (int i = 0; i < z.size(); i++) {
 			if (!this.equals(z.get(i))) {
 				if (new Rectangle((int) (xVal + moveSpeed), this.y, 40, 40)
-						.intersects(new Rectangle(z.get(i).getX(), z.get(i).getY(), 40, 40))) {
+						.intersects(new Rectangle(z.get(i).getX(), z.get(i)
+								.getY(), 40, 40))) {
 					x = false;
 				}
 			}
 		}
 		for (int i = 0; i < o.size(); i++) {
 			if (!this.equals(o.get(i))) {
-				if (new Rectangle((int) (xVal + moveSpeed), this.y, 40, 40).intersects(
-						new Rectangle(o.get(i).getX(), o.get(i).getY(), o.get(i).getWidth(), o.get(i).getHeight()))) {
+				if (new Rectangle((int) (xVal + moveSpeed), this.y, 40, 40)
+						.intersects(new Rectangle(o.get(i).getX(), o.get(i)
+								.getY(), o.get(i).getWidth(), o.get(i)
+								.getHeight()))) {
 					x = false;
 				}
 			}
@@ -135,15 +146,18 @@ public class Zombie extends MapObject {
 		for (int i = 0; i < z.size(); i++) {
 			if (!this.equals(z.get(i))) {
 				if (new Rectangle(this.x, (int) (yVal - moveSpeed), 40, 40)
-						.intersects(new Rectangle(z.get(i).getX(), z.get(i).getY(), 40, 40))) {
+						.intersects(new Rectangle(z.get(i).getX(), z.get(i)
+								.getY(), 40, 40))) {
 					x = false;
 				}
 			}
 		}
 		for (int i = 0; i < o.size(); i++) {
 			if (!this.equals(o.get(i))) {
-				if (new Rectangle(this.x, (int) (yVal - moveSpeed), 40, 40).intersects(
-						new Rectangle(o.get(i).getX(), o.get(i).getY(), o.get(i).getWidth(), o.get(i).getHeight()))) {
+				if (new Rectangle(this.x, (int) (yVal - moveSpeed), 40, 40)
+						.intersects(new Rectangle(o.get(i).getX(), o.get(i)
+								.getY(), o.get(i).getWidth(), o.get(i)
+								.getHeight()))) {
 					x = false;
 				}
 			}
@@ -160,15 +174,18 @@ public class Zombie extends MapObject {
 		for (int i = 0; i < z.size(); i++) {
 			if (!this.equals(z.get(i))) {
 				if (new Rectangle(this.x, (int) (yVal + moveSpeed), 40, 50)
-						.intersects(new Rectangle(z.get(i).getX(), z.get(i).getY(), 40, 40))) {
+						.intersects(new Rectangle(z.get(i).getX(), z.get(i)
+								.getY(), 40, 40))) {
 					x = false;
 				}
 			}
 		}
 		for (int i = 0; i < o.size(); i++) {
 			if (!this.equals(o.get(i))) {
-				if (new Rectangle(this.x,(int) (yVal + moveSpeed), 40, 50).intersects(
-						new Rectangle(o.get(i).getX(), o.get(i).getY(), o.get(i).getWidth(), o.get(i).getHeight()))) {
+				if (new Rectangle(this.x, (int) (yVal + moveSpeed), 40, 50)
+						.intersects(new Rectangle(o.get(i).getX(), o.get(i)
+								.getY(), o.get(i).getWidth(), o.get(i)
+								.getHeight()))) {
 					x = false;
 				}
 			}
@@ -198,7 +215,8 @@ public class Zombie extends MapObject {
 
 	@Override
 	public boolean equals(Object o) {
-		if (((MapObject) o).getX() == this.x && ((MapObject) o).getY() == this.y) {
+		if (((MapObject) o).getX() == this.x
+				&& ((MapObject) o).getY() == this.y) {
 			return true;
 		}
 		return false;
