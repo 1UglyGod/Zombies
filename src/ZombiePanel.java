@@ -41,6 +41,7 @@ public class ZombiePanel extends JPanel {
 	private int meleeTime = 2;
 	private Random rand = new Random();
 	private Image map;
+
 	public ZombiePanel() {
 		this.setSize(1200, 800);
 		this.setBackground(Color.black);
@@ -68,19 +69,21 @@ public class ZombiePanel extends JPanel {
 	private void addBlockers() {
 		// TODO Auto-generated method stub
 		int num = (int) ((Math.random() * 10) + 1);
-		for (int i = 0; i < num; i++) {
-			Hut temp = new Hut((int) (Math.random() * 1050), (int) (Math.random() * 550) + 100);
-			boolean toAdd = true;
-			for (int j = 0; j < blockers.size(); j++) {
-				if (temp.getRect().intersects(blockers.get(j).getRect())) {
-					toAdd = false;
-					break;
-				}
-			}
-			if (toAdd) {
-				blockers.add(temp);
-			}
-		}
+		// for (int i = 0; i < num; i++) {
+		// Hut temp = new Hut((int) (Math.random() * 1050), (int) (Math.random()
+		// * 550) + 100);
+		// boolean toAdd = true;
+		// for (int j = 0; j < blockers.size(); j++) {
+		// if (temp.getRect().intersects(blockers.get(j).getRect())) {
+		// toAdd = false;
+		// break;
+		// }
+		// }
+		// if (toAdd) {
+		// blockers.add(temp);
+		// }
+		// }
+		blockers.add(new Hut(865, 13, 330, 260));
 
 	}
 
@@ -92,22 +95,24 @@ public class ZombiePanel extends JPanel {
 			int randY = rand.nextInt(800);
 			Zombie enemy = new Zombie(randX, randY);
 			boolean toAdd = true;
-			// for (int j = 0; j < blockers.size(); j++) {
-			// if (enemy.getRect().intersects(blockers.get(j).getRect())) {
-			// toAdd = false;
-			// val++;
-			// break;
-			// }
-			// }
-			// for (int i = 0; i < enemies.size(); i++) {
-			// if (enemy.getRect().intersects(enemies.get(i).getRect())) {
-			// toAdd = false;
-			// val++;
-			// break;
-			// }
-			// }
+			for (int j = 0; j < blockers.size(); j++) {
+				if (enemy.getRect().intersects(blockers.get(j).getRect())) {
+					toAdd = false;
+					val++;
+					break;
+				}
+			}
+			for (int i = 0; i < enemies.size(); i++) {
+				if (enemy.getRect().intersects(enemies.get(i).getRect())) {
+					toAdd = false;
+					val++;
+					break;
+				}
+			}
 			if (toAdd) {
 				enemies.add(enemy);
+			} else {
+				val++;
 			}
 		}
 
@@ -115,32 +120,43 @@ public class ZombiePanel extends JPanel {
 
 	private void setUpKeyBindings() {
 		// TODO Auto-generated method stub
-		//this.getInputMap().put(KeyStroke.getKeyStroke("shift"), "beginMelee");
-		this.getInputMap().put(KeyStroke.getKeyStroke("pressed X"), "beginMelee");
-		this.getInputMap().put(KeyStroke.getKeyStroke("released X"), "endMelee");
-		this.getInputMap().put(KeyStroke.getKeyStroke("pressed Z"), "beginShoot");
-		this.getInputMap().put(KeyStroke.getKeyStroke("released Z"), "endShoot");
+		// this.getInputMap().put(KeyStroke.getKeyStroke("shift"),
+		// "beginMelee");
+		this.getInputMap().put(KeyStroke.getKeyStroke("pressed X"),
+				"beginMelee");
+		this.getInputMap()
+				.put(KeyStroke.getKeyStroke("released X"), "endMelee");
+		this.getInputMap().put(KeyStroke.getKeyStroke("pressed Z"),
+				"beginShoot");
+		this.getInputMap()
+				.put(KeyStroke.getKeyStroke("released Z"), "endShoot");
 		this.getInputMap().put(KeyStroke.getKeyStroke("pressed UP"), "beginUp");
 		this.getInputMap().put(KeyStroke.getKeyStroke("released UP"), "endUp");
-		this.getInputMap().put(KeyStroke.getKeyStroke("pressed DOWN"), "beginDown");
-		this.getInputMap().put(KeyStroke.getKeyStroke("released DOWN"), "endDown");
-		this.getInputMap().put(KeyStroke.getKeyStroke("pressed RIGHT"), "beginRight");
-		this.getInputMap().put(KeyStroke.getKeyStroke("released RIGHT"), "endRight");
-		this.getInputMap().put(KeyStroke.getKeyStroke("pressed LEFT"), "beginLeft");
-		this.getInputMap().put(KeyStroke.getKeyStroke("released LEFT"), "endLeft");
-		
-		this.getActionMap().put("beginMelee", new AbstractAction(){
-			public void actionPerformed(ActionEvent e){
+		this.getInputMap().put(KeyStroke.getKeyStroke("pressed DOWN"),
+				"beginDown");
+		this.getInputMap().put(KeyStroke.getKeyStroke("released DOWN"),
+				"endDown");
+		this.getInputMap().put(KeyStroke.getKeyStroke("pressed RIGHT"),
+				"beginRight");
+		this.getInputMap().put(KeyStroke.getKeyStroke("released RIGHT"),
+				"endRight");
+		this.getInputMap().put(KeyStroke.getKeyStroke("pressed LEFT"),
+				"beginLeft");
+		this.getInputMap().put(KeyStroke.getKeyStroke("released LEFT"),
+				"endLeft");
+
+		this.getActionMap().put("beginMelee", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
 				meleePressed = true;
 			}
 		});
-		
-		this.getActionMap().put("endMelee", new AbstractAction(){
-			public void actionPerformed(ActionEvent e){
+
+		this.getActionMap().put("endMelee", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
 				meleePressed = false;
 			}
 		});
-		
+
 		this.getActionMap().put("beginShoot", new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -150,11 +166,12 @@ public class ZombiePanel extends JPanel {
 
 			private void shoot() {
 				// TODO Auto-generated method stub
-				bullets.add(new Bullet(myPlayer.getX() + 25, myPlayer.getY() + 25, myPlayer.getDirection()));
+				bullets.add(new Bullet(myPlayer.getX() + 25,
+						myPlayer.getY() + 25, myPlayer.getDirection()));
 				bullets.removeAmmo();
 			}
 		});
-		
+
 		this.getActionMap().put("endShoot", new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -267,7 +284,7 @@ public class ZombiePanel extends JPanel {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		g.drawImage(map, 0, 0, null);
-		
+
 		for (int i = 0; i < enemies.size(); i++) {
 
 			enemies.get(i).draw(g, myPlayer.getX(), myPlayer.getY());
@@ -276,9 +293,9 @@ public class ZombiePanel extends JPanel {
 			bullets.get(i).draw(g);
 		}
 		myPlayer.draw(g);
-		for (int i = 0; i < blockers.size(); i++) {
-			blockers.get(i).draw(g);
-		}
+//		for (int i = 0; i < blockers.size(); i++) {
+//			blockers.get(i).draw(g);
+//		}
 		Font font = new Font("Verdana", Font.BOLD, 12);
 		g.setColor(Color.white);
 		g.drawString("Score: " + score, 1000, 10);
@@ -288,9 +305,9 @@ public class ZombiePanel extends JPanel {
 		if (checkStart) {
 			g.drawString("Time Left in Safe Zone: " + hutTime, 1000, 70);
 		}
-		if(checkStartMelee && !checkStart){
+		if (checkStartMelee && !checkStart) {
 			g.drawString("Time Left to Melee: " + meleeTime, 1000, 70);
-		}else if(checkStartMelee){
+		} else if (checkStartMelee) {
 			g.drawString("Time Left to Melee: " + meleeTime, 1000, 85);
 		}
 
@@ -316,7 +333,7 @@ public class ZombiePanel extends JPanel {
 		if (meleePressed) {
 			melee();
 			myPlayer.setMeleeTrue();
-		}else{
+		} else {
 			myPlayer.setMeleeFalse();
 		}
 		for (int i = 0; i < enemies.size(); i++) {
@@ -333,7 +350,7 @@ public class ZombiePanel extends JPanel {
 		playerVSZombie();
 		// player/house relationship
 		playerInHouse();
-		//check if player is meleeing too long
+		// check if player is meleeing too long
 		playerIsMelee();
 		checkHealth();
 		incrementTimes();
@@ -369,15 +386,15 @@ public class ZombiePanel extends JPanel {
 			}
 		}
 	}
-	
-	public void playerIsMelee(){
-		if(myPlayer.getMeleeStatus() && !checkStartMelee){
+
+	public void playerIsMelee() {
+		if (myPlayer.getMeleeStatus() && !checkStartMelee) {
 			meleeTime = 2;
 			t3.start();
 			checkStartMelee = true;
 		}
-		
-		if(!myPlayer.getMeleeStatus() && checkStartMelee){
+
+		if (!myPlayer.getMeleeStatus() && checkStartMelee) {
 			t3.stop();
 			checkStartMelee = false;
 		}
@@ -406,8 +423,8 @@ public class ZombiePanel extends JPanel {
 		// TODO Auto-generated method stub
 		if (myPlayer.getHealth() <= 0) {
 			t.stop();
-			JOptionPane.showMessageDialog(null, "Score: " + score + "\nLevel: " + level, "You Lose!",
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Score: " + score + "\nLevel: "
+					+ level, "You Lose!", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -416,7 +433,8 @@ public class ZombiePanel extends JPanel {
 		for (int i = bullets.size() - 1; i >= 0; i--) {
 			if (bullets.get(i).getX() <= 0 || bullets.get(i).getX() > 1200) {
 				bullets.remove(i);
-			} else if (bullets.get(i).getY() <= 0 || bullets.get(i).getY() > 800) {
+			} else if (bullets.get(i).getY() <= 0
+					|| bullets.get(i).getY() > 800) {
 				bullets.remove(i);
 			}
 		}
