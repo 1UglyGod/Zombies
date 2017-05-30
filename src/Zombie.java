@@ -8,7 +8,6 @@ import javax.imageio.ImageIO;
 
 public class Zombie extends MapObject {
 	private int direction = 0;
-	private final int size = 40;
 	private static Image WalkBack;
 	private static Image WalkFront;
 	private static Image WalkLeft;
@@ -16,23 +15,23 @@ public class Zombie extends MapObject {
 	private final double moveSpeed = .5;
 	private double xVal;
 	private double yVal;
-
+	private static final int SIZE=40;
+	
 	public Zombie(int x, int y) {
 		super(x, y);
 		xVal = x;
-		setDim(40, 40);
-		// find way to reference a player
+		yVal =y;
+		setDim(50, 50);
 		initImages();
 	}
 
 	private void initImages() {
-		if (WalkBack == null) {
+		
 			try {
 				URL url = getClass().getResource("res/skeleBack.png");
 				WalkBack = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out
-						.println("Image could not be opened:res/skeleBack.png");
+				System.out.println("Image could not be opened:res/skeleBack.png");
 				e.printStackTrace();
 			}
 
@@ -40,8 +39,7 @@ public class Zombie extends MapObject {
 				URL url = getClass().getResource("res/skeleFront.png");
 				WalkFront = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out
-						.println("Image could not be opened:res/skeleFront.png");
+				System.out.println("Image could not be opened:res/skeleFront.png");
 				e.printStackTrace();
 			}
 
@@ -49,8 +47,7 @@ public class Zombie extends MapObject {
 				URL url = getClass().getResource("res/skeleLeft.png");
 				WalkLeft = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out
-						.println("Image could not be opened:res/skeleLeft.png");
+				System.out.println("Image could not be opened:res/skeleLeft.png");
 				e.printStackTrace();
 			}
 
@@ -58,50 +55,54 @@ public class Zombie extends MapObject {
 				URL url = getClass().getResource("res/skeleRight.png");
 				WalkRight = ImageIO.read(url);
 			} catch (Exception e) {
-				System.out
-						.println("Image could not be opened:res/skeleRight.png");
+				System.out.println("Image could not be opened:res/skeleRight.png");
 				e.printStackTrace();
 			}
-		}
+		
 	}
 
 	public void draw(Graphics g, int x, int y) {
 		if (Math.abs(y - this.getY()) > Math.abs(x - this.getX())) {
 			if (y > this.getY()) {
-				g.drawImage(WalkFront, this.x, this.y, size, size, null);
+				g.drawImage(WalkFront, this.x, this.y, SIZE, SIZE, null);
 
 			} else {
-				g.drawImage(WalkBack, this.x, this.y, size, size, null);
+				g.drawImage(WalkBack, this.x, this.y, SIZE, SIZE, null);
 			}
 		}
 
 		if (Math.abs(y - this.getY()) < Math.abs(x - this.getX())) {
 			if (x > this.getX()) {
-				g.drawImage(WalkRight, this.x, this.y, size, size, null);
+				g.drawImage(WalkRight, this.x, this.y, SIZE, SIZE, null);
 			} else {
-				g.drawImage(WalkLeft, this.x, this.y, size, size, null);
+				g.drawImage(WalkLeft, this.x, this.y, SIZE, SIZE, null);
 			}
 		}
 
 	}
 
-	public void moveLeft(List<Zombie> z, List<MapObject> o) {
+	public void moveLeft(List<Zombie> z, List<MapObject> o, List<BlockTiles> t) {
 		boolean x = true;
 		for (int i = 0; i < z.size(); i++) {
 			if (!this.equals(z.get(i))) {
 				if (new Rectangle((int) (xVal - moveSpeed), this.y, 40, 40)
-						.intersects(new Rectangle(z.get(i).getX(), z.get(i)
-								.getY(), 40, 40))) {
+						.intersects(new Rectangle(z.get(i).getX(), z.get(i).getY(), 40, 40))) {
 					x = false;
 				}
 			}
 		}
 		for (int i = 0; i < o.size(); i++) {
 			if (!this.equals(o.get(i))) {
-				if (new Rectangle((int) (xVal - moveSpeed), this.y, 40, 40)
-						.intersects(new Rectangle(o.get(i).getX(), o.get(i)
-								.getY(), o.get(i).getWidth(), o.get(i)
-								.getHeight()))) {
+				if (new Rectangle((int) (xVal - moveSpeed), this.y, 40, 40).intersects(
+						new Rectangle(o.get(i).getX(), o.get(i).getY(), o.get(i).getWidth(), o.get(i).getHeight()))) {
+					x = false;
+				}
+			}
+		}
+		for (int i = 0; i < t.size(); i++) {
+			if (!this.equals(t.get(i))) {
+					if (new Rectangle((int)(xVal - moveSpeed), this.y, 40, 40)
+					.intersects(t.get(i).getRect())) {
 					x = false;
 				}
 			}
@@ -113,23 +114,28 @@ public class Zombie extends MapObject {
 		}
 	}
 
-	public void moveRight(List<Zombie> z, List<MapObject> o) {
+	public void moveRight(List<Zombie> z, List<MapObject> o,List<BlockTiles> t) {
 		boolean x = true;
 		for (int i = 0; i < z.size(); i++) {
 			if (!this.equals(z.get(i))) {
 				if (new Rectangle((int) (xVal + moveSpeed), this.y, 40, 40)
-						.intersects(new Rectangle(z.get(i).getX(), z.get(i)
-								.getY(), 40, 40))) {
+						.intersects(new Rectangle(z.get(i).getX(), z.get(i).getY(), 40, 40))) {
 					x = false;
 				}
 			}
 		}
 		for (int i = 0; i < o.size(); i++) {
 			if (!this.equals(o.get(i))) {
-				if (new Rectangle((int) (xVal + moveSpeed), this.y, 40, 40)
-						.intersects(new Rectangle(o.get(i).getX(), o.get(i)
-								.getY(), o.get(i).getWidth(), o.get(i)
-								.getHeight()))) {
+				if (new Rectangle((int) (xVal + moveSpeed), this.y, 40, 40).intersects(
+						new Rectangle(o.get(i).getX(), o.get(i).getY(), o.get(i).getWidth(), o.get(i).getHeight()))) {
+					x = false;
+				}
+			}
+		}
+		for (int i = 0; i < t.size(); i++) {
+			if (!this.equals(t.get(i))) {
+					if (new Rectangle((int)(xVal + moveSpeed), this.y, 40, 40)
+					.intersects(t.get(i).getRect())) {
 					x = false;
 				}
 			}
@@ -141,23 +147,28 @@ public class Zombie extends MapObject {
 		}
 	}
 
-	public void moveUp(List<Zombie> z, List<MapObject> o) {
+	public void moveUp(List<Zombie> z, List<MapObject> o,List<BlockTiles> t) {
 		boolean x = true;
 		for (int i = 0; i < z.size(); i++) {
 			if (!this.equals(z.get(i))) {
 				if (new Rectangle(this.x, (int) (yVal - moveSpeed), 40, 40)
-						.intersects(new Rectangle(z.get(i).getX(), z.get(i)
-								.getY(), 40, 40))) {
+						.intersects(new Rectangle(z.get(i).getX(), z.get(i).getY(), 40, 40))) {
 					x = false;
 				}
 			}
 		}
 		for (int i = 0; i < o.size(); i++) {
 			if (!this.equals(o.get(i))) {
-				if (new Rectangle(this.x, (int) (yVal - moveSpeed), 40, 40)
-						.intersects(new Rectangle(o.get(i).getX(), o.get(i)
-								.getY(), o.get(i).getWidth(), o.get(i)
-								.getHeight()))) {
+				if (new Rectangle(this.x, (int) (yVal - moveSpeed), 40, 40).intersects(
+						new Rectangle(o.get(i).getX(), o.get(i).getY(), o.get(i).getWidth(), o.get(i).getHeight()))) {
+					x = false;
+				}
+			}
+		}
+		for (int i = 0; i < t.size(); i++) {
+			if (!this.equals(t.get(i))) {
+					if (new Rectangle(this.x,(int)(yVal - moveSpeed), 40, 40)
+					.intersects(t.get(i).getRect())) {
 					x = false;
 				}
 			}
@@ -169,23 +180,28 @@ public class Zombie extends MapObject {
 		}
 	}
 
-	public void moveDown(List<Zombie> z, List<MapObject> o) {
+	public void moveDown(List<Zombie> z, List<MapObject> o,List<BlockTiles> t) {
 		boolean x = true;
 		for (int i = 0; i < z.size(); i++) {
 			if (!this.equals(z.get(i))) {
 				if (new Rectangle(this.x, (int) (yVal + moveSpeed), 40, 50)
-						.intersects(new Rectangle(z.get(i).getX(), z.get(i)
-								.getY(), 40, 40))) {
+						.intersects(new Rectangle(z.get(i).getX(), z.get(i).getY(), 40, 40))) {
 					x = false;
 				}
 			}
 		}
 		for (int i = 0; i < o.size(); i++) {
 			if (!this.equals(o.get(i))) {
-				if (new Rectangle(this.x, (int) (yVal + moveSpeed), 40, 50)
-						.intersects(new Rectangle(o.get(i).getX(), o.get(i)
-								.getY(), o.get(i).getWidth(), o.get(i)
-								.getHeight()))) {
+				if (new Rectangle(this.x,(int) (yVal + moveSpeed), 40, 50).intersects(
+						new Rectangle(o.get(i).getX(), o.get(i).getY(), o.get(i).getWidth(), o.get(i).getHeight()))) {
+					x = false;
+				}
+			}
+		}
+		for (int i = 0; i < t.size(); i++) {
+			if (!this.equals(t.get(i))) {
+					if (new Rectangle(this.x,(int)(yVal + moveSpeed), 40, 50)
+					.intersects(t.get(i).getRect())) {
 					x = false;
 				}
 			}
@@ -215,8 +231,7 @@ public class Zombie extends MapObject {
 
 	@Override
 	public boolean equals(Object o) {
-		if (((MapObject) o).getX() == this.x
-				&& ((MapObject) o).getY() == this.y) {
+		if (((MapObject) o).getX() == this.x && ((MapObject) o).getY() == this.y) {
 			return true;
 		}
 		return false;

@@ -1,3 +1,4 @@
+import java.awt.Graphics;
 import java.awt.Image;
 import java.net.URL;
 
@@ -11,8 +12,14 @@ public class Bullet extends MapObject {
 	public Bullet(int x, int y, int dir) {
 		super(x, y);
 		direction = dir;
-		setDim(5, 5);
-		if (bulletImage == null) {
+		setDim(10, 10);
+		initImages();
+	
+	}
+
+	private void initImages() {
+		// TODO Auto-generated method stub
+			if (bulletImage == null) {
 			try {
 				URL url = getClass().getResource("res/Bullet.png");
 				bulletImage = ImageIO.read(url);
@@ -44,6 +51,12 @@ public class Bullet extends MapObject {
 			System.err.println("Error moving bullet");
 			break;
 		}
+
+	}
+	
+	@Override
+	public void draw(Graphics g) {
+		g.drawImage(bulletImage, this.x, this.y,10,10,null);
 
 	}
 }

@@ -8,8 +8,8 @@ import javax.imageio.ImageIO;
 public abstract class MapObject {
 	protected int x;
 	protected int y;
-	protected int height;
-	protected int width;
+	private int height;
+	private int width;
 	private Image myImage;
 
 	public MapObject(int x, int y) {
@@ -45,7 +45,15 @@ public abstract class MapObject {
 	public int getY() {
 		return this.y;
 	}
+	
+	public void setX(int a) {
+		this.x=a;
+	}
 
+	public void setY(int a) {
+		this.y=a;
+	}
+	
 	public Image getMyImage() {
 		return this.myImage;
 	}
