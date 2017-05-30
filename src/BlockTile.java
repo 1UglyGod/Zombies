@@ -7,6 +7,6 @@ public class BlockTile extends Hut {
 
 	@Override
 	public void draw(Graphics g) {
-		g.drawImage(getMyImage(), this.x, this.y, this.width, this.height, null);
+		//g.drawImage(getMyImage(), this.x, this.y, this.width, this.height, null);
 	}
 }
